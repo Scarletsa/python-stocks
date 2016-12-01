@@ -19,8 +19,12 @@ def delete(database, ticker):
 # Function for displaying all of the stocks in the database.
 def disp_rows(database):
     cursor = database.execute('select * from portfolio order by ticker')
+    totalValue = 0
+    totalGL = 0
     for row in cursor:
-        print('(\'{}\', {}, \'{}\', {})'.format(row[0], float(row[1]), row[2], row[3]))
+        print('({} ({}), {}, {}, {}, {}, {})'.format(row[1], row[0], row[2], row[3], row[4], (row[2]*row[4]), ((row[2]*row[4])/(row[2]*row[3]))))
+        totalValue += (row[2]*row[4])
+        totalGL += ((row[2]*row[4])/(row[2]*row[3]))
 
 def main():
     
