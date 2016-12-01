@@ -1,15 +1,6 @@
 import database.py
 
 def main():
-     # Initial stocks
-    initialStocks = [['MMM', '3M', '100', '74.00', '118.30'],
-                     ['MDT', 'Medtronic', '50', '56.10', '48.00'],
-                     ['NWAC', 'Northwest Airlines', '100', '67.50', '18.04'],
-                     ['SGI', 'Silicon Graphics', '100', '22.25', '2.25']]
-
-    # Creating a database called students.
-    db = sqlite3.connect('portfolio.dat')
-
     flag == true
 
     while flag == true:
@@ -17,25 +8,33 @@ def main():
 
         if choice == a:
             print('Add a stock to your portfolio!\n')
+            symbol = input(Ticker: )
+            company = input(Company name: )
+            shares = input(Number of shares: )
+            price = input(Purchase price per share: )
+            insert(database, (symbol, company, shares, price))
             
-        
         if choice == d:
-            delete = input('Enter the ticker symbol of the stock to remove: ')
+            remove = input('Enter the ticker symbol of the stock to remove: ')
+            delete(database, remove)
 
         if choice == l:
             file = input('Load file: ')
-            db = sqlite3.connect(file)
-            db.execute('drop table if exists students')
-            db.execute('create table students (name TEXT PRIMARY KEY, age NEAR, class TEXT, gpa REAL)')  
+            database = sqlite3.connect('portfolio.dat')
+            database.execute('drop table if exists students')
+            database.execute('create table students (ticker TEXT PRIMARY KEY, company TEXT, shares NEAR, initial REAL, current REAL)')  
 
         if choice == u:
+            print('Update stock prices (<Return> to keep current values)...')
 
         if choice == r:
             sort = input('Sort output by (N)ame, or (V)alue? ').lower()
             
             if sort == v:
+                retrieve(database, currentValue)
 
             if sort == n:
+                retrieve(database, tickerName)
 
         if choice == q:
             save = input('Save {} (y/n)? '.format(file))
@@ -46,14 +45,7 @@ def main():
 
             print('Bye!')
             flag = false
-
     
     url = 'http://finance.yahoo.com/d/quotes.csv?s={}&f=sl1d1t1c1ohgv&e=.csv'.format()
-
-    shares = 100
-    pp = 22.25
-    latest = 2.25
-    value = shares*latest
-    G/L = float((shares*latest)/(shares*pp))
-    
+   
 if __name__== '__main__': main()
