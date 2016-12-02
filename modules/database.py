@@ -1,6 +1,8 @@
 #CRUD FUNCTIONAILITY MODULE
 import sqlite3
 
+def whatever():
+
 # Function for adding new stocks into databse
 def insert(database, row):
     database.execute('insert into students (ticker, company, shares, initial, current) values (?, ?, ?, ?, ?)', (row[0], row[1], row[2], row[3], row[4]))
@@ -27,5 +29,5 @@ def disp_rows(database):
         totalGL += ((row[2]*row[4])/(row[2]*row[3]))
 
 def main():
-    
+
 if __name__ == "__main__": main()
