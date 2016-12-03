@@ -1,6 +1,6 @@
 import csv
 import urllib2
-import database.py
+from modules import database
 
 def main():
     flag == true
@@ -10,10 +10,17 @@ def main():
 
         if choice == a:
             print('Add a stock to your portfolio!\n')
-            symbol = input(Ticker: )
-            company = input(Company name: )
-            shares = input(Number of shares: )
-            price = input(Purchase price per share: )
+            symbol = input("Ticker: ")
+            company = input("Company name: ")
+            shares = input("Number of shares: ")
+            price = input("Purchase price per share: $")
+
+            url = 'http://finance.yahoo.com/d/quotes.csv?s={}&f=sl1d1t1c1ohgv&e=.csv'.format(symbol)
+            response = urllib2.urlopen(url)
+            cr = csv.reader(response)
+
+            for row in cr:
+                print row
             insert(database, (symbol, company, shares, price))
 
         if choice == d:
@@ -21,10 +28,10 @@ def main():
             delete(database, remove)
 
         if choice == l:
-            file = input('Load file: ')
-            database = sqlite3.connect('portfolio.dat')
-            database.execute('drop table if exists students')
-            database.execute('create table students (ticker TEXT PRIMARY KEY, company TEXT, shares NEAR, initial REAL, current REAL)')
+            f = input('Load file: ')
+            database = sqlite3.connect(f)
+            database.execute('drop table if exists portfolio')
+            database.execute('create table portfolio (ticker TEXT PRIMARY KEY, company TEXT, shares NEAR, initial REAL, current REAL)')
 
         if choice == u:
             print('Update stock prices (<Return> to keep current values)...')
@@ -48,7 +55,7 @@ def main():
             print('Bye!')
             flag = false
 
-    
+
     url = 'http://finance.yahoo.com/d/quotes.csv?s={}&f=sl1d1t1c1ohgv&e=.csv'.format()
     response = urllib2.urlopen(url)
     cr = csv.reader(response)
