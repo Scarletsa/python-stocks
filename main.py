@@ -7,81 +7,78 @@
 #to the porfolio, remove stocks from the porfolio, update
 #stock prices from the internet, print out the stocks
 #in a print-out sorted by either name or value.
- import csv
- import urllib2
- from modules import database
+
+import csv
+from urllib.request import urlopen
+from modules import database
+import sqlite3
 
 def main():
-    flag == true
+    flag = True
 
     #Loop that runs until user enters 'Q' or 'q'.
-    while flag == true:
+    while flag == True:
         choice = input("(A)dd/(D)elete stocks, (L)oad file, (U)pdate prices, (R)eport, or (Q)uit? ").lower()
-
 
         #Condtional for choice 'A' or 'a'.
         #Adds a stock to portfolio.dat
-        if choice == a:
+        if choice == 'a':
             print('Add a stock to your portfolio!\n')
-            symbol = input(Ticker: )
-            company = input(Company name: )
-            shares = input(Number of shares: )
-            price = input(Purchase price per share: )
-            insert(database, (symbol, company, shares, price))
+            symbol = input('Ticker: ')
+            company = input('Company name: ')
+            shares = input('Number of shares: ')
+            price = input('Purchase price per share: ')
+
+            insert(db, (symbol, company, shares, price))
 
         #Conditional for choice 'D' or 'd'
         #Removes a stock from portfolio.dat
-        if choice == d:
+        if choice == 'd':
             remove = input('Enter the ticker symbol of the stock to remove: ')
             delete(database, remove)
 
-
         #Conditional for choice 'L' or 'l'
         #Loads the intialized portfolio.dat
-        if choice == l:
-            file = input('Load file: ')
-            database = sqlite3.connect('portfolio.dat')
-            database.execute('drop table if exists students')
-            database.execute('create table students (ticker TEXT PRIMARY KEY, company TEXT, shares NEAR, initial REAL, current REAL)')
-
+        if choice == 'l':
+            inFile = input('Load file: ')
+            tempFile = inFile
+            db = sqlite3.connect(inFile)
 
         #Conditional for choice 'U' or 'u'
         #Updates the current values of the stocks in portfolio.dat
-        if choice == u:
+        if choice == 'u':
             print('Update stock prices (<Return> to keep current values)...')
 
         #Conditional for choice 'R' or 'r'
         #Prints out the portfolio.dat in required format based on
         #another set of conditionals for 'Name' or 'Value'
-        if choice == r:
+        if choice == 'r':
             sort = input('Sort output by (N)ame, or (V)alue? ').lower()
-
 
             #Sub-Conditional for choice 'V' or 'v'
             #Prints out portfolio.dat in value-order
-            if sort == v:
-                retrieve(database, currentValue)
+            if sort == 'v':
+                database.retrieve(database, currentValue)
 
             #Sub-Conditional for choice 'N' or 'n'
             #Prints out portfolio.dat in name-order
-            if sort == n:
-                retrieve(database, tickerName)
-
+            if sort == 'n':
+                database.retrieve(database, tickerName)
 
         #Conditioanl for choice 'Q' or 'q'
         #Allows the user to quit
-        if choice == q:
+        if choice == 'q':
             save = input('Save {} (y/n)? '.format(file))
-
 
             #Conditional for choice 'Y' or 'y'
             #For saving the datatbase
-            if save.lower() == y:
-
+            if save.lower() == 'y':
+                pass
 
             #Conditional for choice 'N' or 'n'
             #For not saving the datatbase
-            if save.lower() == n:
+            if save.lower() == 'n':
+                pass
 
             print('Bye!')
             flag = false
