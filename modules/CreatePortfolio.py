@@ -1,4 +1,3 @@
-@@ -0,0 +1,33 @@
 import database
 import sqlite3
 import csv
@@ -20,15 +19,21 @@ def main():
     for row in initialStocks:
         database.insert(db, row)
 
-    url = 'http://finance.yahoo.com/d/quotes.csv?s={}&f=sl1d1t1c1ohgv&e=.csv'.format('MMM' + 'MDT')
-    response = urlopen(url)
-    df = open(response, "rt", encoding="utf8")
+    symbols = ['MMM', 'MDT', 'GOOG']
+    #for i in initialStocks:
+        #symbols.append(initialStocks[1][0])
 
-    cr = csv.reader(df)
+    url = ("http://finance.yahoo.com/d/quotes.csv?s={symbols}&f=a".format(symbols="+".join(symbols)))
+    prices = urlopen(url).read().decode().split('\n')
+    ask_quotes = {symbol: quote for symbol, quote in zip(symbols, prices)}
 
-    for row in cr:
-        print(row)
+    print(ask_quotes)
 
-    database.disp_rows(db)
+    #cr = csv.reader(df)
+
+    #for row in cr:
+        #print(row)
+
+    #database.disp_rows(db)
 
 if __name__ == "__main__": main()

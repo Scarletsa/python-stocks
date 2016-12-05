@@ -15,12 +15,6 @@ def main():
             shares = input("Number of shares: ")
             price = input("Purchase price per share: $")
 
-            url = 'http://finance.yahoo.com/d/quotes.csv?s={}&f=sl1d1t1c1ohgv&e=.csv'.format(symbol)
-            response = urllib2.urlopen(url)
-            cr = csv.reader(response)
-
-            for row in cr:
-                print row
             insert(database, (symbol, company, shares, price))
 
         if choice == d:
