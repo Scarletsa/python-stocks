@@ -19,12 +19,28 @@ def main():
     for row in initialStocks:
         database.insert(db, row)
 
-    symbols = ['MMM', 'MDT', 'GOOG']
-    #for i in initialStocks:
-        #symbols.append(initialStocks[1][0])
+    symbols = []
+    for i in range(len(initialStocks)):
+        symbols.append(initialStocks[i][0])
 
-    url = ("http://finance.yahoo.com/d/quotes.csv?s={symbols}&f=a".format(symbols="+".join(symbols)))
-    prices = urlopen(url).read().decode().split('\n')
+    print(symbols)
+
+    url = ("http://finance.yahoo.com/d/quotes.csv?s={symbols}&f=sl1d1t1c1ohgv&e=.csv ".format(symbols="+".join(symbols)))
+    content = urlopen(url).read().decode().split('\n')
+
+    prices = []
+
+    print(content)
+
+    
+    for k in content:
+        stockData = k.split(',')
+        print(stockData)
+        if len(stockData) == 9:
+            prices.append(stockData[1])
+
+    print(prices)
+    
     ask_quotes = {symbol: quote for symbol, quote in zip(symbols, prices)}
 
     print(ask_quotes)
