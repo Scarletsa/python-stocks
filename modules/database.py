@@ -17,10 +17,13 @@ def delete(database, ticker):
     database.commit()
 
 # Function for displaying all of the stocks in the database.
-def disp_rows(database):
-    cursor = database.execute('select * from portfolio order by company')
+def disp_rows(database, cmd):
+    cursor = database.execute(cmd)
     totalValue = 0
     totalGL = 0
+
+    print('Company                   Shares   Pur.  Latest   Value     G/L')
+    print('=================================================================')
     for row in cursor:
         comp = row[1] + " (" + row[0] + ")"
         gl = (-1 + ( (row[2]*row[4]) / (row[2]*row[3]) ))*100

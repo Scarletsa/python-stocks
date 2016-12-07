@@ -58,12 +58,14 @@ def main():
             #Sub-Conditional for choice 'V' or 'v'
             #Prints out portfolio.dat in value-order
             if sort == 'v':
-                database.retrieve(database, currentValue)
+                cmd = 'select * from portfolio order by current'
+                disp_rows(database, cmd)
 
             #Sub-Conditional for choice 'N' or 'n'
             #Prints out portfolio.dat in name-order
             if sort == 'n':
-                database.retrieve(database, tickerName)
+                cmd = 'select * from portfolio order by company'
+                disp_rows(database, cmd)
 
         #Conditioanl for choice 'Q' or 'q'
         #Allows the user to quit
