@@ -3,7 +3,7 @@ import sqlite3
 
 # Function for adding new stocks into databse
 def insert(database, row):
-    database.execute('insert into portfolio (ticker, company, shares, initial, current) values (?, ?, ?, ?, ?)', (row[0], row[1], row[2], row[3], row[4]))
+    database.execute('insert into portfolio (ticker, company, shares, initial, current, value, gl) values (?, ?, ?, ?, ?, ?, ?)', (row[0], row[1], row[2], row[3], row[4]))
     database.commit()
 
 # Function for finding stocks in the database.

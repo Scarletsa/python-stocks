@@ -13,8 +13,7 @@ def main():
 
     # Creating a database called students.
     db = sqlite3.connect('portfolio.dat')
-    db.execute('drop table if exists portfolio')
-    db.execute('create table portfolio (ticker TEXT PRIMARY KEY, company TEXT, shares NEAR, initial NEAR, current NEAR)')
+
 
     for row in initialStocks:
         database.insert(db, row)
@@ -32,7 +31,7 @@ def main():
 
     print(content)
 
-    
+
     for k in content:
         stockData = k.split(',')
         print(stockData)
@@ -40,7 +39,7 @@ def main():
             prices.append(stockData[1])
 
     print(prices)
-    
+
     ask_quotes = {symbol: quote for symbol, quote in zip(symbols, prices)}
 
     print(ask_quotes)

@@ -14,6 +14,7 @@ from modules import database
 import sqlite3
 
 def main():
+    stocks = []
     flag = True
 
     #Loop that runs until user enters 'Q' or 'q'.
@@ -26,10 +27,28 @@ def main():
             print('Add a stock to your portfolio!\n')
             symbol = input('Ticker: ')
             company = input('Company name: ')
-            shares = input('Number of shares: ')
-            price = input('Purchase price per share: ')
+            shares = int(input('Number of shares: '))
+            pPrice = int((input('Purchase price per share: ')/100))
 
-            insert(db, (symbol, company, shares, price))
+            name = company + " (" + symbol + ")"
+
+            url = ("http://finance.yahoo.com/d/quotes.csv?s={}&f=sl1d1t1c1ohgv&e=.csv ".format(symbol))
+            content = urlopen(url).read().decode().split('\n')
+            for k in content:
+                stockData = k.split(',')
+                print(stockData)
+                if len(stockData) == 9:
+                    cPrice = int(stockData[1]/100)
+
+            iValue = shares*(pPrice*100)
+            cValue = shares*(cPrice*100)
+
+            gl = (-1 + ( (cValue) / (iValue) ))*100
+            totalValue += (cValue)
+            totalGL += ((cValue)/(iValue))
+
+            temp = [symbol, company, shares, pPrice, cPrice, cValue, gl]
+            stocks.append(temp)
 
         #Conditional for choice 'D' or 'd'
         #Removes a stock from portfolio.dat
@@ -43,6 +62,8 @@ def main():
             inFile = input('Load file: ')
             tempFile = inFile
             db = sqlite3.connect(inFile)
+            db.execute('drop table if exists portfolio')
+            db.execute('create table portfolio (ticker TEXT PRIMARY KEY, company TEXT, shares NEAR, initial NEAR, current NEAR, value REAL, gl REAL)')
 
         #Conditional for choice 'U' or 'u'
         #Updates the current values of the stocks in portfolio.dat
@@ -54,6 +75,8 @@ def main():
         #another set of conditionals for 'Name' or 'Value'
         if choice == 'r':
             sort = input('Sort output by (N)ame, or (V)alue? ').lower()
+
+            print('{0: <27}'.format(name) + '{0: >4}'.format(shares) + '{:8.2f}'.format(price) + '{:8.2f}'.format(cPrice) + '{0: >8}'.format(int(cValue)) + '{:8.1f}%'.format(gl))
 
             #Sub-Conditional for choice 'V' or 'v'
             #Prints out portfolio.dat in value-order
