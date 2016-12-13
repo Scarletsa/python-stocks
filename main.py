@@ -10,7 +10,6 @@
 
 import csv
 from urllib.request import urlopen
-from modules import database
 import sqlite3
 from operator import itemgetter
 
@@ -43,7 +42,7 @@ def main():
                     try:
                         cPrice = float(stockData[1])*100
                     except:
-                        cPrice = 0
+                        cPrice = pPrice
 
             iValue = shares*(pPrice/100)
             cValue = shares*(cPrice/100)
@@ -73,6 +72,12 @@ def main():
             iFile = input('Load file: ')
             tempFile = iFile
             db = sqlite3.connect(iFile)
+            cursor = db.cursor()
+            cursor.execute("SELECT * FROM portfolio")
+            result = cursor.fetchall()
+            stocks = []
+            for r in result:
+                stocks.append(r)
 
         #Conditional for choice 'U' or 'u'
         #Updates the current values of the stocks in portfolio.dat
@@ -114,18 +119,29 @@ def main():
         #Conditioanl for choice 'Q' or 'q'
         #Allows the user to quit
         if choice == 'q':
-            if iFile == "":
-                save = input('Would you like to save? ')
-                if save.lower() == 'y':
-                    fName = input('Save file as: ')
-            else:
-                save = input('Save {} (y/n)? '.format(iFile))
+            save = input('Save {} (y/n)? '.format(iFile))
 
             #Conditional for choice 'Y' or 'y'
             #For saving the datatbase
             if save.lower() == 'y':
-                db.execute('drop table if exists portfolio')
-                db.execute('create table portfolio (ticker TEXT PRIMARY KEY, company TEXT, shares NEAR, initial NEAR, current NEAR, value REAL, gl REAL)')
+                if iFile == "":
+                    fName = input('Save file as: ')
+                    db = sqlite3.connect(fName)
+                    db.execute('drop table if exists portfolio')
+                    db.execute('create table portfolio (ticker TEXT PRIMARY KEY, company TEXT, shares NEAR, initial NEAR, current NEAR, value REAL, gl REAL)')
+
+                    for row in stocks:
+                        db.execute('insert into portfolio (ticker, company, shares, initial, current, value, gl) values (?, ?, ?, ?, ?, ?, ?)', (row[0], row[1], row[2], row[3], row[4], row[5], row[6]))
+
+                    db.commit()
+                else:
+                    db.execute('drop table if exists portfolio')
+                    db.execute('create table portfolio (ticker TEXT PRIMARY KEY, company TEXT, shares NEAR, initial NEAR, current NEAR, value REAL, gl REAL)')
+
+                    for row in stocks:
+                        db.execute('insert into portfolio (ticker, company, shares, initial, current, value, gl) values (?, ?, ?, ?, ?, ?, ?)', (row[0], row[1], row[2], row[3], row[4], row[5], row[6]))
+
+                    db.commit()
 
             #Conditional for choice 'N' or 'n'
             #For not saving the datatbase
