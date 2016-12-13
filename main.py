@@ -12,6 +12,7 @@ import csv
 from urllib.request import urlopen
 from modules import database
 import sqlite3
+from operator import itemgetter
 
 def main():
     stocks = []
@@ -30,8 +31,6 @@ def main():
             shares = int(input('Number of shares: '))
             pPrice = int((input('Purchase price per share: ')/100))
 
-            name = company + " (" + symbol + ")"
-
             url = ("http://finance.yahoo.com/d/quotes.csv?s={}&f=sl1d1t1c1ohgv&e=.csv ".format(symbol))
             content = urlopen(url).read().decode().split('\n')
             for k in content:
@@ -44,8 +43,6 @@ def main():
             cValue = shares*(cPrice*100)
 
             gl = (-1 + ( (cValue) / (iValue) ))*100
-            totalValue += (cValue)
-            totalGL += ((cValue)/(iValue))
 
             temp = [symbol, company, shares, pPrice, cPrice, cValue, gl]
             stocks.append(temp)
@@ -62,8 +59,6 @@ def main():
             inFile = input('Load file: ')
             tempFile = inFile
             db = sqlite3.connect(inFile)
-            db.execute('drop table if exists portfolio')
-            db.execute('create table portfolio (ticker TEXT PRIMARY KEY, company TEXT, shares NEAR, initial NEAR, current NEAR, value REAL, gl REAL)')
 
         #Conditional for choice 'U' or 'u'
         #Updates the current values of the stocks in portfolio.dat
@@ -76,29 +71,36 @@ def main():
         if choice == 'r':
             sort = input('Sort output by (N)ame, or (V)alue? ').lower()
 
-            print('{0: <27}'.format(name) + '{0: >4}'.format(shares) + '{:8.2f}'.format(price) + '{:8.2f}'.format(cPrice) + '{0: >8}'.format(int(cValue)) + '{:8.1f}%'.format(gl))
-
             #Sub-Conditional for choice 'V' or 'v'
             #Prints out portfolio.dat in value-order
             if sort == 'v':
-                cmd = 'select * from portfolio order by current'
-                disp_rows(database, cmd)
+                vSort = sorted(stocks, key=itemgetter(5))
+                for i in vSort
+                    totalValue += (cValue)
+                    totalGL += ((cValue)/(iValue))
+                    name = i[1] + " (" + i[0] + ")"
+                    print('{0: <27}'.format(name) + '{0: >4}'.format(i[2]) + '{:8.2f}'.format(i[3]) + '{:8.2f}'.format(i[4]) + '{0: >8}'.format(int(i[5])) + '{:8.1f}%'.format(i[6]))
 
             #Sub-Conditional for choice 'N' or 'n'
             #Prints out portfolio.dat in name-order
             if sort == 'n':
-                cmd = 'select * from portfolio order by company'
-                disp_rows(database, cmd)
+                nSort = sorted(stocks, key=itemgetter(1))
+                for i in nSort
+                    totalValue += (cValue)
+                    totalGL += ((cValue)/(iValue))
+                    name = i[1] + " (" + i[0] + ")"
+                    print('{0: <27}'.format(name) + '{0: >4}'.format(i[2]) + '{:8.2f}'.format(i[3]) + '{:8.2f}'.format(i[4]) + '{0: >8}'.format(int(i[5])) + '{:8.1f}%'.format(i[6]))
 
         #Conditioanl for choice 'Q' or 'q'
         #Allows the user to quit
         if choice == 'q':
-            save = input('Save {} (y/n)? '.format(file))
+            save = input('Save {} (y/n)? '.format(inFile))
 
             #Conditional for choice 'Y' or 'y'
             #For saving the datatbase
             if save.lower() == 'y':
-                pass
+                db.execute('drop table if exists portfolio')
+                db.execute('create table portfolio (ticker TEXT PRIMARY KEY, company TEXT, shares NEAR, initial NEAR, current NEAR, value REAL, gl REAL)')
 
             #Conditional for choice 'N' or 'n'
             #For not saving the datatbase
