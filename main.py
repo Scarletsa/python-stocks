@@ -57,12 +57,11 @@ def main():
         #Conditional for choice 'D' or 'd'
         #Removes a stock from portfolio.dat
         if choice == 'd':
+            index = 0
 
-            index=0
             remove = input('Enter the ticker symbol of the stock to remove: ')
 
             for each in stocks:
-
                 if remove.upper() == each[0]:
                     stocks.pop(index)
 
@@ -85,6 +84,17 @@ def main():
         #Updates the current values of the stocks in portfolio.dat
         if choice == 'u':
             print('Update stock prices (<Return> to keep current values)...')
+            for o in range(len(stocks)):
+                url = ("http://finance.yahoo.com/d/quotes.csv?s={}&f=sl1d1t1c1ohgv&e=.csv ".format(stocks[0][0]))
+                content = urlopen(url).read().decode().split('\n')
+                for k in content:
+                    stockData = k.split(',')
+                    print(stockData)
+                    if len(stockData) == 9:
+                        try:
+                            stocks[o][0] = float(stockData[1])*100
+                        except:
+                            stocks[o][0] = stocks[o][4]
 
         #Conditional for choice 'R' or 'r'
         #Prints out the portfolio.dat in required format based on
