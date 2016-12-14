@@ -20,7 +20,7 @@ def main():
 
     #Loop that runs until user enters 'Q' or 'q'.
     while flag == True:
-        choice = input("(A)dd/(D)elete stocks, (L)oad file, (U)pdate prices, (R)eport, or (Q)uit? ").lower()
+        choice = input("\n(A)dd/(D)elete stocks, (L)oad file, (U)pdate prices, (R)eport, or (Q)uit? ").lower()
 
         #Condtional for choice 'A' or 'a'.
         #Adds a stock to portfolio.dat
@@ -29,9 +29,8 @@ def main():
             symbol = input('Ticker: ').upper()
             company = input('Company name: ')
             shares = int(input('Number of shares: '))
-            pPrice = float(input('Purchase price per share: '))
+            pPrice = float(input('Purchase price per share: $'))
             pPrice = int(pPrice*100)
-            print(pPrice)
 
             url = ("http://finance.yahoo.com/d/quotes.csv?s={}&f=sl1d1t1c1ohgv&e=.csv ".format(symbol))
             content = urlopen(url).read().decode().split('\n')
@@ -39,11 +38,11 @@ def main():
             #it will pull the value. If stock is fictional it will set initial to current
             for k in content:
                 stockData = k.split(',')
-                print(stockData)
                 if len(stockData) == 9:
                     try:
                         cPrice = float(stockData[1])*100
                     except:
+                        print('A current price for {} could not be found.'.format(symbol))
                         cPrice = pPrice
 
             iValue = shares*(pPrice/100)
@@ -86,7 +85,7 @@ def main():
         if choice == 'u':
             print('Update stock prices (<Return> to keep current values)...')
             for o in range(len(stocks)):
-                url = ("http://finance.yahoo.com/d/quotes.csv?s={}&f=sl1d1t1c1ohgv&e=.csv ".format(stocks[0][0]))
+                url = ("http://finance.yahoo.com/d/quotes.csv?s={}&f=sl1d1t1c1ohgv&e=.csv ".format(stocks[o][0]))
                 content = urlopen(url).read().decode().split('\n')
                 for k in content:
                     stockData = k.split(',')
@@ -95,6 +94,7 @@ def main():
                         try:
                             stocks[o][0] = float(stockData[1])*100
                         except:
+                            print('A current price for {} could not be found.'.format(stocks[o][0]))
                             stocks[o][0] = stocks[o][4]
 
         #Conditional for choice 'R' or 'r'
@@ -109,7 +109,7 @@ def main():
             #Sub-Conditional for choice 'V' or 'v'
             #Prints out portfolio.dat in value-order
             if sort == 'v':
-                print('Company                   Shares   Pur.  Latest   Value     G/L')
+                print('\nCompany                   Shares   Pur.  Latest   Value     G/L')
                 print('=================================================================')
                 vSort = sorted(stocks, key=itemgetter(5))
                 for i in vSort:
