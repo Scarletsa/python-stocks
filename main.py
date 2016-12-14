@@ -103,7 +103,10 @@ def main():
                     totalGL += ((i[5])/(i[2]*i[3]/100))
                     name = i[1] + " (" + i[0] + ")"
                     print('{0: <27}'.format(name) + '{0: >4}'.format(i[2]) + '{:8.2f}'.format(i[3]/100) + '{:8.2f}'.format(i[4]/100) + '{0: >8}'.format(int(i[5])) + '{:8.1f}%'.format(i[6]))
-
+                print('{0: <50}'.format('') +'{:16}'.format('---------------'))
+                print('{0: <47}'.format('') + '{0: >8}'.format(int(totalValue)) + '{:8.1f}%'.format(totalGL))
+                print('{0: <50}'.format('') +'{:16}'.format('==============='))
+                
             #Sub-Conditional for choice 'N' or 'n'
             #Prints out portfolio.dat in name-order
             if sort == 'n':
@@ -115,7 +118,9 @@ def main():
                     totalGL += ((i[5])/(i[2]*i[3]/100))
                     name = i[1] + " (" + i[0] + ")"
                     print('{0: <27}'.format(name) + '{0: >4}'.format(i[2]) + '{:8.2f}'.format(i[3]/100) + '{:8.2f}'.format(i[4]/100) + '{0: >8}'.format(int(i[5])) + '{:8.1f}%'.format(i[6]))
-
+                print('{0: <50}'.format('') +'{:16}'.format('---------------'))
+                print('{0: <47}'.format('') + '{0: >8}'.format(int(totalValue)) + '{:8.1f}%'.format(totalGL))
+                print('{0: <50}'.format('') +'{:16}'.format('==============='))
         #Conditioanl for choice 'Q' or 'q'
         #Allows the user to quit
         if choice == 'q':
