@@ -4,9 +4,9 @@
 #This program is designed to let a user enter any number
 #of stocks to a list. They can be removed, or updated.
 #You can either start a new list or load a saved older
-#version of a portfolio. By updating stocks are then
+#version of a portfolio. By updating stocks, they are then
 #issued their current value at that exact time from
-#Yahoo finance. Once your ready to finish you
+#Yahoo finance. Once you're ready to finish you
 #can quit with the option of saving or not saving.
 import csv
 from urllib.request import urlopen
@@ -18,7 +18,7 @@ def main():
     stocks = []
     flag = True
 
-    #Loop that runs until user enters 'Q' or 'q'.
+    #Loop to process user input.
     while flag == True:
         choice = input("\n(A)dd/(D)elete stocks, (L)oad file, (U)pdate prices, (R)eport, or (Q)uit? ").lower()
 
