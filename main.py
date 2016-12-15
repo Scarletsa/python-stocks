@@ -56,16 +56,11 @@ def main():
         #Conditional for choice 'D' or 'd'
         #Removes a stock from portfolio.dat
         if choice == 'd':
-
-            index=0
             remove = input('Enter the ticker symbol of the stock to remove: ')
 
-            for each in stocks:
-
+            for index, each in enumerate(stocks):
                 if remove.upper() == each[0]:
                     stocks.pop(index)
-
-                index += 1
 
         #Conditional for choice 'L' or 'l'
         #Loads the intialized portfolio.dat
@@ -83,19 +78,25 @@ def main():
         #Conditional for choice 'U' or 'u'
         #Updates the current values of the stocks in portfolio.dat
         if choice == 'u':
-            print('Update stock prices (<Return> to keep current values)...')
-            for o in range(len(stocks)):
+            temp = []
+            print('\nUpdating stock prices...')
+            for o, p in enumerate(stocks):
                 url = ("http://finance.yahoo.com/d/quotes.csv?s={}&f=sl1d1t1c1ohgv&e=.csv ".format(stocks[o][0]))
                 content = urlopen(url).read().decode().split('\n')
                 for k in content:
                     stockData = k.split(',')
-                    print(stockData)
+                    p = list(p)
                     if len(stockData) == 9:
                         try:
-                            stocks[o][0] = float(stockData[1])*100
+                            p[4] = float(stockData[1])*100
+                            temp.append(p)
+                            print('{}: {}'.format(p[0], (p[4]/100)))
                         except:
                             print('A current price for {} could not be found.'.format(stocks[o][0]))
-                            stocks[o][0] = stocks[o][4]
+                            p[4] = stocks[o][3]
+                            temp.append(p)
+            stocks = temp
+            print('Stock prices updated!')
 
         #Conditional for choice 'R' or 'r'
         #Prints out the portfolio.dat in required format based on
@@ -121,11 +122,11 @@ def main():
                 print('{0: <50}'.format('') +'{:16}'.format('---------------'))
                 print('{0: <47}'.format('') + '{0: >8}'.format(int(totalCurrentValue)) + '{:8.1f}%'.format(totalGL))
                 print('{0: <50}'.format('') +'{:16}'.format('==============='))
-                
+
             #Sub-Conditional for choice 'N' or 'n'
             #Prints out portfolio.dat in name-order
             if sort == 'n':
-                print('Company                   Shares   Pur.  Latest   Value     G/L')
+                print('\nCompany                   Shares   Pur.  Latest   Value     G/L')
                 print('=================================================================')
                 nSort = sorted(stocks, key=itemgetter(1))
                 for i in nSort:
@@ -137,7 +138,7 @@ def main():
                 print('{0: <50}'.format('') +'{:16}'.format('---------------'))
                 print('{0: <47}'.format('') + '{0: >8}'.format(int(totalCurrentValue)) + '{:8.1f}%'.format(totalGL))
                 print('{0: <50}'.format('') +'{:16}'.format('==============='))
-                
+
         #Conditioanl for choice 'Q' or 'q'
         #Allows the user to quit
         if choice == 'q':
