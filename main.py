@@ -110,8 +110,7 @@ def main():
             #Sub-Conditional for choice 'V' or 'v'
             #Prints out portfolio.dat in value-order
             if sort == 'v':
-                print('\nCompany                   Shares   Pur.  Latest   Value     G/L')
-                print('=================================================================')
+                printTopTable()
                 vSort = sorted(stocks, key=itemgetter(5))
                 for i in vSort:
                     totalCurrentValue += (i[5])
@@ -119,15 +118,12 @@ def main():
                     totalGL = (-1 + ( (totalCurrentValue) / (totalInitialValue)))*100
                     name = i[1] + " (" + i[0] + ")"
                     print('{0: <27}'.format(name) + '{0: >4}'.format(i[2]) + '{:8.2f}'.format(i[3]/100) + '{:8.2f}'.format(i[4]/100) + '{0: >8}'.format(int(i[5])) + '{:8.1f}%'.format(i[6]))
-                print('{0: <50}'.format('') +'{:16}'.format('---------------'))
-                print('{0: <47}'.format('') + '{0: >8}'.format(int(totalCurrentValue)) + '{:8.1f}%'.format(totalGL))
-                print('{0: <50}'.format('') +'{:16}'.format('==============='))
+                printBottomTable(totalCurrentValue, totalGL)
 
             #Sub-Conditional for choice 'N' or 'n'
             #Prints out portfolio.dat in name-order
             if sort == 'n':
-                print('\nCompany                   Shares   Pur.  Latest   Value     G/L')
-                print('=================================================================')
+                printTopTable()
                 nSort = sorted(stocks, key=itemgetter(1))
                 for i in nSort:
                     totalCurrentValue += (i[5])
@@ -135,9 +131,7 @@ def main():
                     totalGL = (-1 + ( (totalCurrentValue) / (totalInitialValue)))*100
                     name = i[1] + " (" + i[0] + ")"
                     print('{0: <27}'.format(name) + '{0: >4}'.format(i[2]) + '{:8.2f}'.format(i[3]/100) + '{:8.2f}'.format(i[4]/100) + '{0: >8}'.format(int(i[5])) + '{:8.1f}%'.format(i[6]))
-                print('{0: <50}'.format('') +'{:16}'.format('---------------'))
-                print('{0: <47}'.format('') + '{0: >8}'.format(int(totalCurrentValue)) + '{:8.1f}%'.format(totalGL))
-                print('{0: <50}'.format('') +'{:16}'.format('==============='))
+                printBottomTable(totalCurrentValue, totalGL)
 
         #Conditioanl for choice 'Q' or 'q'
         #Allows the user to quit
@@ -151,8 +145,7 @@ def main():
                 if iFile == "":
                     fName = input('Save file as: ')
                     db = sqlite3.connect(fName)
-                    db.execute('drop table if exists portfolio')
-                    db.execute('create table portfolio (ticker TEXT PRIMARY KEY, company TEXT, shares NEAR, initial NEAR, current NEAR, value REAL, gl REAL)')
+                    executeDatabase()
 
                     for row in stocks:
                         db.execute('insert into portfolio (ticker, company, shares, initial, current, value, gl) values (?, ?, ?, ?, ?, ?, ?)', (row[0], row[1], row[2], row[3], row[4], row[5], row[6]))
@@ -160,8 +153,7 @@ def main():
                     db.commit()
                 #Conditional to overwrite the database with the new information
                 else:
-                    db.execute('drop table if exists portfolio')
-                    db.execute('create table portfolio (ticker TEXT PRIMARY KEY, company TEXT, shares NEAR, initial NEAR, current NEAR, value REAL, gl REAL)')
+                    executeDatabase()
 
                     for row in stocks:
                         db.execute('insert into portfolio (ticker, company, shares, initial, current, value, gl) values (?, ?, ?, ?, ?, ?, ?)', (row[0], row[1], row[2], row[3], row[4], row[5], row[6]))
@@ -176,4 +168,17 @@ def main():
             print('Bye!')
             flag = False
 
+def printTopTable():
+    print('\nCompany                   Shares   Pur.  Latest   Value     G/L')
+    print('=================================================================')
+
+def printBottomTable(totalCurrentValue, totalGL):
+    print('{0: <50}'.format('') +'{:16}'.format('---------------'))
+    print('{0: <47}'.format('') + '{0: >8}'.format(int(totalCurrentValue)) + '{:8.1f}%'.format(totalGL))
+    print('{0: <50}'.format('') +'{:16}'.format('==============='))
+
+def executeDatabase():
+    db.execute('drop table if exists portfolio')
+    db.execute('create table portfolio (ticker TEXT PRIMARY KEY, company TEXT, shares NEAR, initial NEAR, current NEAR, value REAL, gl REAL)')
+    
 if __name__== '__main__': main()
