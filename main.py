@@ -168,15 +168,18 @@ def main():
             print('Bye!')
             flag = False
 
+#Method for printing the top of the table
 def printTopTable():
     print('\nCompany                   Shares   Pur.  Latest   Value     G/L')
     print('=================================================================')
 
+#method for printing the bottom of the table
 def printBottomTable(totalCurrentValue, totalGL):
     print('{0: <50}'.format('') +'{:16}'.format('---------------'))
     print('{0: <47}'.format('') + '{0: >8}'.format(int(totalCurrentValue)) + '{:8.1f}%'.format(totalGL))
     print('{0: <50}'.format('') +'{:16}'.format('==============='))
 
+#Metjod for creating the table in the database
 def executeDatabase():
     db.execute('drop table if exists portfolio')
     db.execute('create table portfolio (ticker TEXT PRIMARY KEY, company TEXT, shares NEAR, initial NEAR, current NEAR, value REAL, gl REAL)')
