@@ -103,35 +103,18 @@ def main():
         #another set of conditionals for 'Name' or 'Value'
         if choice == 'r':
             sort = input('Sort output by (N)ame, or (V)alue? ').lower()
-            totalCurrentValue = 0
-            totalInitialValue = 0
-            totalGL = 0
 
             #Sub-Conditional for choice 'V' or 'v'
             #Prints out portfolio.dat in value-order
             if sort == 'v':
-                printTopTable()
                 vSort = sorted(stocks, key=itemgetter(5))
-                for i in vSort:
-                    totalCurrentValue += (i[5])
-                    totalInitialValue += ((i[2])*(i[3]/100))
-                    totalGL = (-1 + ( (totalCurrentValue) / (totalInitialValue)))*100
-                    name = i[1] + " (" + i[0] + ")"
-                    print('{0: <27}'.format(name) + '{0: >4}'.format(i[2]) + '{:8.2f}'.format(i[3]/100) + '{:8.2f}'.format(i[4]/100) + '{0: >8}'.format(int(i[5])) + '{:8.1f}%'.format(i[6]))
-                printBottomTable(totalCurrentValue, totalGL)
+                printTable(vSort)
 
             #Sub-Conditional for choice 'N' or 'n'
             #Prints out portfolio.dat in name-order
             if sort == 'n':
-                printTopTable()
                 nSort = sorted(stocks, key=itemgetter(1))
-                for i in nSort:
-                    totalCurrentValue += (i[5])
-                    totalInitialValue += ((i[2])*(i[3]/100))
-                    totalGL = (-1 + ( (totalCurrentValue) / (totalInitialValue)))*100
-                    name = i[1] + " (" + i[0] + ")"
-                    print('{0: <27}'.format(name) + '{0: >4}'.format(i[2]) + '{:8.2f}'.format(i[3]/100) + '{:8.2f}'.format(i[4]/100) + '{0: >8}'.format(int(i[5])) + '{:8.1f}%'.format(i[6]))
-                printBottomTable(totalCurrentValue, totalGL)
+                printTable(nSort)
 
         #Conditioanl for choice 'Q' or 'q'
         #Allows the user to quit
@@ -169,12 +152,18 @@ def main():
             flag = False
 
 #Method for printing the top of the table
-def printTopTable():
+def printTable(stockSort):
+    totalCurrentValue = 0
+    totalInitialValue = 0
+    totalGL = 0
     print('\nCompany                   Shares   Pur.  Latest   Value     G/L')
     print('=================================================================')
-
-#method for printing the bottom of the table
-def printBottomTable(totalCurrentValue, totalGL):
+    for i in stockSort:
+        totalCurrentValue += (i[5])
+        totalInitialValue += ((i[2])*(i[3]/100))
+        totalGL = (-1 + ( (totalCurrentValue) / (totalInitialValue)))*100
+        name = i[1] + " (" + i[0] + ")"
+        print('{0: <27}'.format(name) + '{0: >4}'.format(i[2]) + '{:8.2f}'.format(i[3]/100) + '{:8.2f}'.format(i[4]/100) + '{0: >8}'.format(int(i[5])) + '{:8.1f}%'.format(i[6]))
     print('{0: <50}'.format('') +'{:16}'.format('---------------'))
     print('{0: <47}'.format('') + '{0: >8}'.format(int(totalCurrentValue)) + '{:8.1f}%'.format(totalGL))
     print('{0: <50}'.format('') +'{:16}'.format('==============='))
@@ -183,5 +172,5 @@ def printBottomTable(totalCurrentValue, totalGL):
 def executeDatabase():
     db.execute('drop table if exists portfolio')
     db.execute('create table portfolio (ticker TEXT PRIMARY KEY, company TEXT, shares NEAR, initial NEAR, current NEAR, value REAL, gl REAL)')
-    
+
 if __name__== '__main__': main()
