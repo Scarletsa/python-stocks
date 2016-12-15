@@ -128,20 +128,11 @@ def main():
                 if iFile == "":
                     fName = input('Save file as: ')
                     db = sqlite3.connect(fName)
-                    executeDatabase()
+                    executeDatabase(db, stocks)
 
-                    for row in stocks:
-                        db.execute('insert into portfolio (ticker, company, shares, initial, current, value, gl) values (?, ?, ?, ?, ?, ?, ?)', (row[0], row[1], row[2], row[3], row[4], row[5], row[6]))
-
-                    db.commit()
                 #Conditional to overwrite the database with the new information
                 else:
-                    executeDatabase()
-
-                    for row in stocks:
-                        db.execute('insert into portfolio (ticker, company, shares, initial, current, value, gl) values (?, ?, ?, ?, ?, ?, ?)', (row[0], row[1], row[2], row[3], row[4], row[5], row[6]))
-
-                    db.commit()
+                    executeDatabase(db, stocks)
 
             #Conditional for choice 'N' or 'n'
             #For not saving the datatbase
@@ -169,8 +160,10 @@ def printTable(stockSort):
     print('{0: <50}'.format('') +'{:16}'.format('==============='))
 
 #Metjod for creating the table in the database
-def executeDatabase():
+def executeDatabase(db, stockList):
     db.execute('drop table if exists portfolio')
     db.execute('create table portfolio (ticker TEXT PRIMARY KEY, company TEXT, shares NEAR, initial NEAR, current NEAR, value REAL, gl REAL)')
-
+    for row in stockList:
+        db.execute('insert into portfolio (ticker, company, shares, initial, current, value, gl) values (?, ?, ?, ?, ?, ?, ?)', (row[0], row[1], row[2], row[3], row[4], row[5], row[6]))
+    db.commit()
 if __name__== '__main__': main()
