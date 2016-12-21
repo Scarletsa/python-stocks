@@ -41,12 +41,11 @@ def main():
             #it will pull the value. If stock is fictional it will set initial to current
             for k in content:
                 stockData = k.split(',')
-                if len(stockData) == 9:
-                    try:
-                        cPrice = float(stockData[1])*100
-                    except:
-                        print('A current price for {} could not be found.'.format(symbol))
-                        cPrice = pPrice
+                try:
+                    cPrice = float(stockData[1])*100
+                except:
+                    print('A current price for {} could not be found.'.format(symbol))
+                    cPrice = pPrice
 
             iValue = shares*(pPrice/100)
             cValue = shares*(cPrice/100)
@@ -95,17 +94,16 @@ def main():
                     stockData = k.split(',')
                     #Converting the content of the stocks list to a list to we can use the values
                     p = list(p)
-                    if len(stockData) == 9:
-                        #Try to get the price from the internet and store it to a temp list
-                        try:
-                            p[4] = float(stockData[1])*100
-                            temp.append(p)
-                            print('{}: {}'.format(p[0], (p[4]/100)))
-                        #If that fails tell the user so and store the initial price to a temp list
-                        except:
-                            print('A current price for {} could not be found.'.format(stocks[o][0]))
-                            p[4] = stocks[o][3]
-                            temp.append(p)
+                    #Try to get the price from the internet and store it to a temp list
+                    try:
+                        p[4] = float(stockData[1])*100
+                        temp.append(p)
+                        print('{}: {}'.format(p[0], (p[4]/100)))
+                    #If that fails tell the user so and store the initial price to a temp list
+                    except:
+                        print('A current price for {} could not be found.'.format(stocks[o][0]))
+                        p[4] = stocks[o][3]
+                        temp.append(p)
             #Store the temp list to the stocks list and tell the user it's done
             stocks = temp
             print('Stock prices updated!')
